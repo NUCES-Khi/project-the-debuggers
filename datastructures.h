@@ -3,7 +3,7 @@
 
 #include <QString>
 
-// Custom Dynamic Array (NO STL)
+
 template<typename T>
 class DynamicArray {
 private:
@@ -40,9 +40,9 @@ public:
     void clear() { sz = 0; }
     T& operator[](int idx) { return arr[idx]; }
 
-    // For sorting
+
     void sort() {
-        // Bubble sort
+
         for(int i = 0; i < sz - 1; i++) {
             for(int j = 0; j < sz - i - 1; j++) {
                 if(arr[j] > arr[j + 1]) {
@@ -55,7 +55,7 @@ public:
     }
 };
 
-// Hash Table for frequency counting
+// Hash Table
 class FrequencyTable {
 private:
     struct Node {
@@ -128,7 +128,6 @@ public:
 
     int size() const { return sz; }
 
-    // Iterator-like access
     void getAllEntries(DynamicArray<unsigned char>& keys,
                        DynamicArray<unsigned long long>& values) {
         keys.clear();
@@ -144,7 +143,7 @@ public:
     }
 };
 
-// Code Table for Huffman codes
+// Huffman codes
 class CodeTable {
 private:
     QString codes[256];
@@ -174,10 +173,9 @@ public:
     }
 };
 
-// Forward declaration for HuffmanNode
 struct HuffmanNode;
 
-// Min Heap specifically for HuffmanNode pointers
+// HuffmanNode pointers
 class MinHeap {
 private:
     HuffmanNode** heap;
@@ -208,4 +206,4 @@ public:
     bool isEmpty() const { return sz == 0; }
 };
 
-#endif // DATASTRUCTURES_H
+#endif
