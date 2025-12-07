@@ -1,7 +1,6 @@
-#include "lzwcompressor.h"
+#include "lzwcompressor.h"#include "lzwcompressor.h"
 #include <QByteArray>
 
-// Hash table for fast dictionary lookup
 struct HashEntry {
     QByteArray sequence;
     int code;
@@ -9,7 +8,6 @@ struct HashEntry {
     HashEntry() : code(-1), used(false) {}
 };
 
-// Simple hash function for byte sequences
 static unsigned int hashBytes(const QByteArray& data) {
     unsigned int hash = 5381;
     for(int i = 0; i < data.size(); i++) {
@@ -19,7 +17,6 @@ static unsigned int hashBytes(const QByteArray& data) {
 }
 
 void LZWCompressor::initDictionary() {
-    // Initialize with all single-byte values (0-255)
     for(int i = 0; i < 256; i++) {
         dictionary[i].str = QString(QChar(i));
         dictionary[i].code = i;
@@ -28,7 +25,6 @@ void LZWCompressor::initDictionary() {
         reverseDictionary[i] = QString(QChar(i));
     }
 
-    // Mark rest as unused
     for(int i = 256; i < MAX_DICT_SIZE; i++) {
         dictionary[i].used = false;
         reverseDictionary[i] = "";
@@ -63,22 +59,18 @@ QByteArray LZWCompressor::compress(const QByteArray& input) {
     QString current = "";
 
     for(int i = 0; i < input.size(); i++) {
-        // Use QChar to handle all byte values (0-255)
         QChar ch = QChar((unsigned char)input[i]);
         QString combined = current + ch;
 
         if(findInDictionary(combined) != -1) {
             current = combined;
         } else {
-            // Output code for current
             int code = findInDictionary(current);
             if(code != -1) {
-                // Write as 12-bit code (2 bytes, but only 12 bits used)
                 result.append((char)(code & 0xFF));
                 result.append((char)((code >> 8) & 0x0F));
             }
 
-            // Add to dictionary if space available
             if(dictSize < MAX_DICT_SIZE) {
                 dictionary[dictSize].str = combined;
                 dictionary[dictSize].code = dictSize;
@@ -90,7 +82,6 @@ QByteArray LZWCompressor::compress(const QByteArray& input) {
         }
     }
 
-    // Output last code
     if(!current.isEmpty()) {
         int code = findInDictionary(current);
         if(code != -1) {
@@ -103,15 +94,14 @@ QByteArray LZWCompressor::compress(const QByteArray& input) {
 }
 
 QByteArray LZWCompressor::decompress(const QByteArray& input) {
-    if(input.size() < 6) return QByteArray(); // At least header + 1 code
+    if(input.size() < 6) return QByteArray();
 
-    // Read original size
     int origSize = ((unsigned char)input[0]) |
                    ((unsigned char)input[1] << 8) |
                    ((unsigned char)input[2] << 16) |
                    ((unsigned char)input[3] << 24);
 
-    if(origSize <= 0 || origSize > 100000000) { // Sanity check
+    if(origSize <= 0 || origSize > 100000000) {
         return QByteArray();
     }
 
@@ -121,7 +111,6 @@ QByteArray LZWCompressor::decompress(const QByteArray& input) {
     QByteArray result;
     result.reserve(origSize);
 
-    // Read first code
     if(input.size() < 6) return QByteArray();
     int prevCode = ((unsigned char)input[4]) |
                    (((unsigned char)input[5] & 0x0F) << 8);
@@ -131,7 +120,6 @@ QByteArray LZWCompressor::decompress(const QByteArray& input) {
     QString prevStr = reverseDictionary[prevCode];
     result.append(prevStr.toUtf8());
 
-    // Process remaining codes
     for(int i = 6; i < input.size(); i += 2) {
         if(i + 1 >= input.size()) break;
 
@@ -141,24 +129,24 @@ QByteArray LZWCompressor::decompress(const QByteArray& input) {
         QString entry;
 
         if(code < dictSize && !reverseDictionary[code].isEmpty()) {
-            // Code exists in dictionary
+
             entry = reverseDictionary[code];
         } else if(code == dictSize) {
-            // Special case: code not in dictionary yet
+
             entry = prevStr + prevStr[0];
         } else {
-            // Invalid code
+
             break;
         }
 
         result.append(entry.toUtf8());
 
-        // Stop if we've reached original size
+
         if(result.size() >= origSize) {
             return result.left(origSize);
         }
 
-        // Add to dictionary
+
         if(dictSize < MAX_DICT_SIZE) {
             reverseDictionary[dictSize] = prevStr + entry[0];
             dictSize++;
@@ -169,3 +157,4 @@ QByteArray LZWCompressor::decompress(const QByteArray& input) {
 
     return result;
 }
+
