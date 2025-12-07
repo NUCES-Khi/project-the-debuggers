@@ -1,4 +1,5 @@
-#include "lzwcompressor.h"#include "lzwcompressor.h"
+#include "lzwcompressor.h"
+#include "lzwcompressor.h"
 #include <QByteArray>
 
 struct HashEntry {
@@ -157,4 +158,5 @@ QByteArray LZWCompressor::decompress(const QByteArray& input) {
 
     return result;
 }
+
 
