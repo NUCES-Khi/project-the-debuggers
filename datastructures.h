@@ -176,7 +176,7 @@ public:
 struct HuffmanNode;
 
 // HuffmanNode pointers
-class MinHeap {
+class MaxHeap {
 private:
     HuffmanNode** heap;
     int cap;
@@ -196,8 +196,8 @@ private:
     void heapifyDown(int idx);
 
 public:
-    MinHeap(int capacity = 256);
-    ~MinHeap();
+    MaxHeap(int capacity = 256);
+    ~MaxHeap();
 
     void insert(HuffmanNode* val);
     HuffmanNode* extractMin();
@@ -207,3 +207,4 @@ public:
 };
 
 #endif
+
