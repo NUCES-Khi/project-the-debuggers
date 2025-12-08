@@ -1,22 +1,22 @@
 #include "datastructures.h"
 #include "huffmancompressor.h"
 
-MinHeap::MinHeap(int capacity) : cap(capacity), sz(0) {
+MaxHeap::MaxHeap(int capacity) : cap(capacity), sz(0) {
     heap = new HuffmanNode*[cap];
 }
 
-MinHeap::~MinHeap() {
+MaxHeap::~MaxHeap() {
     delete[] heap;
 }
 
-void MinHeap::heapifyUp(int idx) {
+void MaxHeap::heapifyUp(int idx) {
     while(idx > 0 && heap[idx]->frequency < heap[parent(idx)]->frequency) {
         swap(idx, parent(idx));
         idx = parent(idx);
     }
 }
 
-void MinHeap::heapifyDown(int idx) {
+void MaxHeap::heapifyDown(int idx) {
     int smallest = idx;
     int left = leftChild(idx);
     int right = rightChild(idx);
@@ -32,14 +32,14 @@ void MinHeap::heapifyDown(int idx) {
     }
 }
 
-void MinHeap::insert(HuffmanNode* val) {
+void MaxHeap::insert(HuffmanNode* val) {
     if(sz >= cap) return;
     heap[sz] = val;
     heapifyUp(sz);
     sz++;
 }
 
-HuffmanNode* MinHeap::extractMin() {
+HuffmanNode* MaxHeap::extractMin() {
     if(sz == 0) return nullptr;
     HuffmanNode* minVal = heap[0];
     heap[0] = heap[sz - 1];
@@ -49,3 +49,4 @@ HuffmanNode* MinHeap::extractMin() {
     }
     return minVal;
 }
+
