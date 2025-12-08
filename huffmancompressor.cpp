@@ -21,7 +21,7 @@ void HuffmanCompressor::buildFrequencyTable(const QByteArray& data) {
 }
 
 HuffmanNode* HuffmanCompressor::buildHuffmanTree() {
-    MinHeap minHeap(256);
+    MaxHeap MaxHeap(256);
 
     DynamicArray<unsigned char> keys;
     DynamicArray<unsigned long long> values;
@@ -32,26 +32,26 @@ HuffmanNode* HuffmanCompressor::buildHuffmanTree() {
 
     for(int i = 0; i < keys.size(); i++) {
         HuffmanNode* node = new HuffmanNode(keys[i], values[i]);
-        minHeap.insert(node);
+        MaxHeap.insert(node);
     }
 
 
-    if(minHeap.size() == 1) {
-        return minHeap.extractMin();
+    if(MaxHeap.size() == 1) {
+        return MaxHeap.extractMin();
     }
 
-    while(minHeap.size() > 1) {
-        HuffmanNode* left = minHeap.extractMin();
-        HuffmanNode* right = minHeap.extractMin();
+    while(MaxHeap.size() > 1) {
+        HuffmanNode* left = MaxHeap.extractMin();
+        HuffmanNode* right = MaxHeap.extractMin();
 
         HuffmanNode* parent = new HuffmanNode(0, left->frequency + right->frequency);
         parent->left = left;
         parent->right = right;
 
-        minHeap.insert(parent);
+        MaxHeap.insert(parent);
     }
 
-    return minHeap.extractMin();
+    return MaxHeap.extractMin();
 }
 
 void HuffmanCompressor::generateCodes(HuffmanNode* node, QString code) {
@@ -262,3 +262,4 @@ QByteArray HuffmanCompressor::decompress(const QByteArray& input) {
 
     return result;
 }
+
