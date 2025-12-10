@@ -33,7 +33,7 @@ Optionally, compare Huffman encoding with other methods (e.g., Run-Length Encodi
 |        Data Structure          |        Purpose / Where Used         |                                How It Will Be Used                                                 |
 | ------------------------------ | ----------------------------------- | -------------------------------------------------------------------------------------------------- |
 | Array / Map                    | Storing character frequencies       | Count how many times each symbol appears in the input file.                                        |
-| Max-Heap / Priority Queue      | Building the Huffman Tree           | Select two largest frequency nodes repeatedly to build the optimal Huffman tree.                  |
+| Min-Heap / Priority Queue      | Building the Huffman Tree           | Select two smallest frequency nodes repeatedly to build the optimal Huffman tree.                  |
 | Binary Tree (Huffman Tree)     | Encoding structure                  | Nodes represent characters and their frequencies; left/right traversal determines code generation. |
 | Hash Table / Dictionary        | Mapping characters to Huffman codes | Store generated binary codes for quick lookup during encoding and decoding.                        |
 | String / Bit Array             | Compressed data representation      | Store and manipulate binary sequences of encoded data.                                             |
